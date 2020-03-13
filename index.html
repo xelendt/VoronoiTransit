@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8"/>
+<head>
+    <link rel="stylesheet" type = "text/css" href = "../css/styles_ss20.css">	
+    <link rel="stylesheet" type = "text/css" href = "../css/topbar.css">	
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<title>Voronoi Subways</title>
+
+<base href="https://www.xelendt.com">
+
+<link rel="shortcut icon" href="xelendt logo black.png">
+</head>
+
+<html>
+<body>
+
+<header>
+    <a href="/home/#main-menu"
+      id="main-menu-toggle"
+      class="menu-toggle"
+      aria-label="Open main menu">
+      <span class="sr-only">Open main menu</span>
+      <i class="material-icons">menu</i>
+      <!--<span class="fa fa-bars" aria-hidden="true"></span>-->
+    </a>
+
+    <h3 class="logo">XELENDT</h3>
+
+    <nav id="main-menu" class="main-menu" aria-label="Main menu">
+      <a href="/home/#main-menu-toggle"
+        id="main-menu-close"
+        class="menu-close"
+        aria-label="Close main menu">
+        <span class="sr-only">Close main menu</span>
+        <i class="material-icons">close</i>
+        <!--<span class="fa fa-close" aria-hidden="true"></span>-->
+      </a>
+      <ul>
+        <li><a href="/home">ABOUT</a></li>
+        <li><a href="/projects">CODE</a></li>
+        <li><a href="/photos">PHOTOS</a></li>
+        <li><a href="/photos360">360</a></li>
+        <li><a href="/filters">FILTERS</a></li>
+        <!--<li><a href="#">JEWELRY</a></li>-->
+      </ul>
+    </nav>
+
+    <a href="/home/#main-menu-toggle"
+      class="backdrop"
+      tabindex="-1"
+      aria-hidden="true" hidden></a>
+</header>
+
+    <!-- https://github.com/d3/d3-delaunay -->
+    <script src="voronoi_transit/d3-delaunay.js"></script>
+    <h3>Add your own stops to the TTC!</h3>
+    <br>
+    Click to add a subway station, double click to remove
+    <div style="margin:0 auto; text-align: center;">
+      <canvas id="test_canvas" width="894" height="722" style="border:1px solid #c3c3c3;">
+        Your browser does not support the canvas element!
+      </canvas>
+    </div>
+    <div style="text-align: center;">
+        Map from <a href="http://www.johomaps.com/na/canada/ontario/toronto/torontometro.html">Johomaps</a>
+    </div>
+    <div class="divider">
+        <br><hr><br>
+    </div>
+
+    <div style="width: 720px; text-align: left; margin-left: auto; margin-right: auto;">
+        <h3>Voronoi Patterns & Transit</h3>
+        <p>To create a Voronoi pattern, a set of points is given as input. The result is a set of cells, one for each point. For everywhere in the cell, the corresponding point is the closest of all points.
+        </p>
+        <p>This is interesting to us because it may help inform us of transit decisions made by people living within each of the cells. In the map above, the color of the cell corresponds to the closest line available.
+        <p>For example, given that Line 4 passes through the YellowBelt, the housing density will likely be lower than an area like downtown, and given the small area of Bessarion's cell, we can understand why the station is less often visited. It is the most convenient option for few people. Contrast that with a station like Dundas or Osgoode. While the area of the cell is small, the density of both housing and other goods and services is much higher.
+        </p>
+        <h4>Assumptions</h4>
+        <p> <i>Density not accounted for</i> </p>
+        <p>
+        As discussed above, the density in regions across Toronto varies greatly. A large cell in the yellow-belt may not have as large an impact as a larger cell would in the downtown core.
+        </p>
+        <p> <i>Travel is not a straight line</i> </p>
+        <p>
+        To get to subway stations is not a direct path, with city blocks among other obstacles in between point A and point B. For example, while an individual in Flemington Park may be closer to the green line by distance, crossing the Don Valley poses an obstruction that is not taken into consideration here.
+        <p>
+
+        </p>
+
+
+        <h4>Observations</h4>
+        <p>
+        These ideas apply even under the assumptions above. The one thing to note is that locations of boundaries may shift on the map based on different calculations of "distance".
+        </p>
+        <p>
+            <p><i>Reducing load on other stops</i></p>
+            <p>By adding stops, the load on other stops will decrease. One strategy might be to look at stops that are over capacity and add stations close to the outer boundaries of the cell.</p>
+            </p>
+            <p><i>Cell boundaries along impassible landmarks</i>
+            <p>The cell boundary, and more specifically boundaries between different subway lines, is where people are the same distance from two cells. It makes sense to orient lines in this way because if an individual is to pass go to their nearest station, it would not make sense if they had to travel around a rail line, or across the Don Valley first.</p>
+            </p>
+            <p><i>Cell boundaries are the least serviced</i></p>
+            <p>
+            There are two kinds of boundaries. The first kind is created from stations that are connected on a line. The impact of this may be that someone lives on bloor ave. and must choose between walking to bay or st. george. In another case it could mean someone living near Downsview Park might have bus options similar in distance to get them to the subway.
+            </p>
+            <p>
+            Another kind of boundary is created when it is the same distance from two stations that are not connected. For example, if an individual resides the same distance between Pape station as Eglinton. Excluding interchange stations, these often result areas that have the highest distance to any subway stop. In our example, any of their neighbours not on the boundary will have a better choice either toward Pape or toward Eglinton.
+            </p>
+        </p>
+        <h4>Future Work</h4>
+        <p>
+        Future work would involve creating a more accurate representation of transportation preferences. One improvement would be including other public transit modes such as bus or streetcar. Another improvement would be transforming the distance function based on actual distance on how long it would take to walk or drive to various transit locations.
+        </p>
+        <h4>Conclusions</h4>
+        <p>
+            So while the assumptions made may mean this map is only an approximation, it can still provide us a way to visually communicate ways we can improve transit for Torontonians.
+        </p>
+        <br>
+        <br>
+
+    </div>
+
+    <div style="display:none">
+        <img id="tdotmap"
+             src="/home/users/max/Desktop/projects/whereintoronto/voronoi_subways/torontometro.jpg">
+        </img>
+    </div>
+
+    <script>
+        var canvas = document.getElementById("test_canvas");
+        var ctx = canvas.getContext("2d");
+
+        const dbl_click_tolerance = 30;     // d-squared to delete by double clicking
+
+        function get_line_num(index){
+            if(index < 32){
+                return 1;
+            } else if (index < 61){
+                return 2;
+            } else if (index < 67){
+                return 3;
+            } else if (index < 71){
+                return 4;
+            } else {
+                return 5;
+            }
+        }
+
+        function d_squared(x1, y1, x2, y2){
+            return (x2-x1)*(x2-x1) + (y2-y1)*(y2-y1);
+        }
+
+        function remove_nearby_points(x, y){
+
+            i = 0;
+            while(i < points.length){
+                if(get_line_num(i) <= 4){
+                    i += 1;
+                } else {
+                    if(d_squared(points[i][0], points[i][1], x, y) < dbl_click_tolerance){
+                        points.splice(i, 1);
+                    } else {
+                        i += 1;
+                    }
+                }
+            }
+        }
+
+        const overlay_line_colors = [
+            "#00000000", // null
+            "#ffcc3388", // line 1
+            "#00996688", // line 2
+            "#0099cc88", // line 3
+            "#99336688", // line 4
+            "#ff660088", // line 5
+        ];
+        // https://en.wikipedia.org/wiki/Template:TTC_color
+        const solid_line_colors = [
+            "#000000",
+            "#ffcc33", // line 1
+            "#009966", // line 2
+            "#0099cc", // line 3
+            "#993366", // line 4
+            "#ff6600", // line 5
+        ];
+        const points = [
+            //
+            // Line 1
+            //
+            [488, 187], // finch
+            [495, 216], // north york center
+            [501, 237], // sheppard yonge
+            [513, 299], // york mills
+            [524, 349], // lawrence
+            [537, 412], // eglinton
+            [542, 436], // davisville
+            [548, 460], // st clair
+            [553, 480], // summerhill
+            [557, 495], // rosedale
+            [564, 518], // bloor-yonge
+            [568.5, 533.5], // wellesley
+            [572.25, 547], // college
+            [575.5, 558], // dundas
+            [578, 566], // queen
+            [581, 578], // king
+            [574, 589], // union
+            [560, 582], // st andrew
+            [556.5, 573.5], // osgoode
+            [553.5, 563], // st patrick
+            [550.5, 552.5], // queens park
+            [546, 538.5], // museum
+            [533.5, 526], // st george
+            [522, 523], // spadina yellow
+            [516, 506], // dupont
+            [497, 476], // st clair west
+            [449, 433], // eglinton west
+            [438, 401], // glencairn
+            [431, 379], // lawrence west
+            [421, 348], // yorkdale
+            [413, 325], // wilson
+            [387, 275], // downsview
+            //
+            // Line 2
+            //
+            [238, 618], // kipling
+            [262, 601], // islington
+            [289, 592], // royal york
+            [321, 587], // old mill
+            [349, 585], // jane
+            [366, 580.5], // runnymede
+            [380.5, 576], // high park
+            [396.5, 570.5], // keele
+            [417.5, 563.5], // dundas west
+            [439.5, 556.5], // landsdowne
+            [456, 552], // dufferin
+            [467, 548.5], // ossington
+            [481, 544], // christie
+            [505.5, 536], // bathurst
+            [520, 532], // spadina green
+            [550, 521], // bay
+            [581, 516], // sherbourne
+            [592.5, 504.5], // castle-frank
+            [628, 491], // broadview
+            [645, 486], // chester
+            [660, 481.5], // pape
+            [673, 478], // donlands
+            [685, 474.5], // greenwood
+            [698, 470], // coxwell
+            [720, 463], // woodbine
+            [740, 455], // main st
+            [769, 433], // vic park
+            [792, 382], // warden
+            [813, 328], // kennedy green
+            //
+            // Line 3
+            //
+            [819, 324], // kennedy blue
+            [804, 269], // lawrence east
+            [790, 226], // ellesmere
+            [801, 208], // midland
+            [829, 197], // STC
+            [842, 193], // McCowan
+            //
+            // Line 4
+            //
+            [544.5, 223], // bayview
+            [556.5, 219], // bessarion
+            [592.5, 208], // leslie
+            [625.5, 197], // don mills
+        ];
+        //voronoi.render(ctx);
+        //delaunay.render(ctx);
+        //const bounds_path = new Path2D(voronoi.renderBounds());
+
+        // draw map
+        const map_image = document.getElementById("tdotmap");
+        const image = new Image();
+        image.onload = drawMap;
+        image.src = "voronoi_transit/torontometro.jpg";
+
+        function drawMap(){
+
+            ctx.drawImage(image, 0, 0);
+
+            const delaunay = d3.Delaunay.from(points);
+            const voronoi = delaunay.voronoi([0, 0, 894, 722]);
+
+            const cells = voronoi.cellPolygons();
+            var i = 0;
+            // 1st pass to draw the colors
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = `rgba(0, 0, 0, 0.6)`;
+            for (const cell of cells) {
+                //console.log(cell);
+                const cell_path = new Path2D(voronoi.renderCell(i));
+                ctx.fillStyle = `rgba(
+                    ${Math.floor(255 - 10*i)},
+                    ${Math.floor(255 - 10*i)},
+                    0,
+                    0.6
+                )`;
+                line = get_line_num(i);
+                color = overlay_line_colors[line];
+                ctx.fillStyle = color;
+                ctx.fill(cell_path);
+                ctx.stroke(cell_path);
+                i += 1;
+            }
+
+            // 2nd pass to draw the outlines
+
+            for (const point of points) {
+                ctx.fillStyle = `rgba(255, 255, 255, 0.6)`;
+                var circle = new Path2D();
+                //circle.moveTo(point[0], point[1]);
+                circle.arc(point[0], point[1], 3, 0, 2 * Math.PI);
+                ctx.fill(circle);
+                ctx.lineWidth = 1;
+                ctx.stroke(circle);
+            }
+            console.log("done drawing");
+        }
+
+        // https://stackoverflow.com/questions/55677/how-do-i-get-the-coordinates-of-a-mouse-click-on-a-canvas-element
+        function addPoint(canvas, event) {
+            const rect = canvas.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+
+            // to prevent people from adding two points at the same spot
+            // the voronoi seems to bug out, and we log the indexes being
+            // matched up between point and cell
+            var inarray = false;
+            for(const point of points){
+                if(
+                    (Math.abs(point[0] - x) < 0.1)
+                    && (Math.abs(point[1] - y) < 0.1)
+                ) {
+                    inarray = true;
+                }
+            }
+            if( ! inarray ){
+                points.push([x, y]);
+            }
+
+            //console.log("x: " + x + " y: " + y)
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawMap();
+        }
+
+        function delPoint(canvas, event){
+            const rect = canvas.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+            remove_nearby_points(x, y);
+            drawMap();
+        }
+
+        // https://stackoverflow.com/questions/5497073/how-to-differentiate-single-click-event-and-double-click-event
+        var clicks = 0;
+        canvas.addEventListener('click', function(e) {
+            clicks += 1;
+            if(clicks == 1){
+                setTimeout(function(){
+                    if(clicks == 1){
+                        addPoint(canvas, e);
+                    } else {
+                        delPoint(canvas, e);
+                    }
+                    clicks = 0;
+                }, 250);
+            }
+        });
+
+        canvas.addEventListener('dblclick', function(e) {
+            
+        });
+
+    </script>
+</body>
+</head>
